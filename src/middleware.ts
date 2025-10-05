@@ -1,5 +1,15 @@
-export { default } from 'next-auth/middleware';
+import { withAuth } from 'next-auth/middleware';
+
+export default withAuth(() => {}, {
+  callbacks: {
+    // require a session (JWT) for matched routes
+    authorized: ({ token }) => !!token,
+  },
+  pages: {
+    signIn: '/api/auth/signin',
+  },
+});
 
 export const config = {
-  matcher: ['/', '/snippet'],
+  matcher: ['/', '/snippet/:path*'],
 };

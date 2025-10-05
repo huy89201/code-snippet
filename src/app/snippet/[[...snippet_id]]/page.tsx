@@ -24,9 +24,8 @@ function page() {
     name: 'snippet',
 
     rules: {
-      // required: true,
-      validate: (value: string) => {
-        if (value.length > 0) return true;
+      validate: (value?: string) => {
+        if (value && value?.length > 0) return true;
 
         return false;
       },
