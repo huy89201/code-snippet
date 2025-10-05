@@ -14,7 +14,7 @@ async function page({
   }
   
   return (
-    <div className='font-sans min-h-screen max-w-[1442px] w-full mx-auto'>
+    <div className='font-sans min-h-screen max-w-[1442px] w-full mx-auto flex flex-col'>
       {/* Header */}
       <Header />
 

@@ -27,19 +27,25 @@ const SnippetSection = () => {
   const searchParams = useSearchParams();
   const userId = searchParams.get('id');
 
-  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
-    useInfiniteQuery({
-      queryKey: ['SNIPPET_QUERY_KEY', PAGE_SIZE],
-      queryFn: async ({ pageParam = 1 }) =>
-        fetchSnippets({ page: pageParam, userId }),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage) =>
-        lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
-    });
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['SNIPPET_QUERY_KEY', PAGE_SIZE],
+    queryFn: async ({ pageParam = 1 }) =>
+      fetchSnippets({ page: pageParam, userId }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
+  });
 
-  if (isLoading)
+  if (isLoading || isFetching)
     return (
-      <div className='w-screen h-screen flex justify-center items-center text-3xl text-light-text font-medium text-center'>
+      <div className='flex-1 w-max h-max mx-auto flex justify-center items-center text-3xl text-light-text font-medium text-center'>
         Loading...
       </div>
     );
