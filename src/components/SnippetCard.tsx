@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import moment from 'moment';
 import Button from './Button';
 import { Editor } from '@monaco-editor/react';
@@ -8,6 +8,8 @@ import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import axiosInstance from '@/lib/axios';
 import { useQueryClient } from '@tanstack/react-query';
+import { FaShare } from 'react-icons/fa';
+import ShareSnippetDialog from './ShareSnippetDialog';
 
 const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
   // Hooks
@@ -16,6 +18,8 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
   const queryClient = useQueryClient();
 
   // States
+  const [sharePath, setSharePath] = useState<string>();
+
   const userId = searchParams.get('id');
   const isCurrentUserSnippet =
     userId === snippet.user_id || session?.user.id === snippet.user_id;
@@ -31,6 +35,13 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
 
       queryClient.invalidateQueries({ queryKey: ['SNIPPET_QUERY_KEY'] });
     } catch (error) {}
+  };
+
+  const handleShareSnippet = () => {
+    const host = window.location.host;
+    const path = `${host}/snippet?id=${snippet._id}`;
+
+    setSharePath(path);
   };
 
   return (
@@ -63,25 +74,31 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
             </Button>
           </div>
 
-          {isCurrentUserSnippet && (
-            <div className='flex gap-4'>
-              <Link
-                href={{
-                  pathname: '/snippet',
-                  query: { id: snippet._id },
-                }}
-              >
-                <MdModeEdit className='' />
-              </Link>
+          <div className='flex gap-2'>
+            <button className='cursor-pointer' onClick={handleShareSnippet}>
+              <FaShare />
+            </button>
 
-              <button
-                className='cursor-pointer'
-                onClick={() => handleDeleteSnippet(snippet._id)}
-              >
-                <MdDelete />
-              </button>
-            </div>
-          )}
+            {isCurrentUserSnippet && (
+              <Fragment>
+                <Link
+                  href={{
+                    pathname: '/snippet',
+                    query: { id: snippet._id },
+                  }}
+                >
+                  <MdModeEdit className='' />
+                </Link>
+
+                <button
+                  className='cursor-pointer'
+                  onClick={() => handleDeleteSnippet(snippet._id)}
+                >
+                  <MdDelete />
+                </button>
+              </Fragment>
+            )}
+          </div>
         </div>
 
         <div className='flex justify-between mt-2'>
@@ -93,6 +110,12 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
           </div>
         </div>
       </div>
+
+      <ShareSnippetDialog
+        isOpen={!!sharePath}
+        close={() => setSharePath(undefined)}
+        path={sharePath}
+      />
     </div>
   );
 };
