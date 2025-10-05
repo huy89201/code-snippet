@@ -6,12 +6,15 @@ import TagDropdown from '@/components/TagDropdown';
 import { Tag } from '@/types/tag';
 import { useSession } from 'next-auth/react';
 import axiosInstance from '@/lib/axios';
+import Link from 'next/link';
 
 const DEFAULT_LANGUE = 'javascript';
 
 function page() {
+  // Hooks
   const { data: session } = useSession();
 
+  // States
   const [value, setValue] = React.useState<Partial<SnippetPayload> | undefined>(
     {
       timestamp: new Date().getTime(),
@@ -19,6 +22,7 @@ function page() {
     }
   );
 
+  // Helpers
   const handleSelectLang = (value: string) => {
     setValue((prev) => ({ ...prev, langue: value }));
   };
@@ -60,7 +64,10 @@ function page() {
         />
       </div>
 
-      <div className='action flex-[0] flex justify-end'>
+      <div className='action flex-[0] flex gap-4 justify-end'>
+        <Button type='button'>
+          <Link href='/'>Back</Link>
+        </Button>
         <Button onClick={handleSave}>Save</Button>
       </div>
     </div>
