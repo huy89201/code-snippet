@@ -8,7 +8,7 @@ import { useFormContext } from 'react-hook-form';
 
 const TagDropdown = ({}: {}) => {
   // Hooks
-  const hookform = useFormContext<SnippetPayload>();
+  const hookform = useFormContext<SnippetPostPayload>();
 
   const [tags, setTags] = React.useState<Tag[] | undefined>();
   const [currentTag, setCurrentTag] = React.useState<Tag | undefined>();
@@ -19,10 +19,18 @@ const TagDropdown = ({}: {}) => {
         const { data } = await axiosInstance.get<GetTagRes>('/api/tag');
 
         setTags(data.data);
-        setCurrentTag(data?.data?.[0]);
 
-        hookform.setValue('tag_id', data?.data?.[0]._id);
-        hookform.setValue('tag_name', data?.data?.[0].name);
+        const defaultTagId = hookform.getValues('tag_id');
+        const defaultTagName = hookform.getValues('tag_name');
+
+        if (!defaultTagId && !defaultTagName) {
+          setCurrentTag(data?.data?.[0]);
+          hookform.setValue('tag_id', data?.data?.[0]._id);
+          hookform.setValue('tag_name', data?.data?.[0].name);
+        } else {
+          const tag = data.data.find((i) => i._id === defaultTagId);
+          setCurrentTag(tag);
+        }
       } catch (error) {
         console.log(error);
       }

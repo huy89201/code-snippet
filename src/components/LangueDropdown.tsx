@@ -7,10 +7,10 @@ import { DEFAULT_LANGUE } from '@/utils';
 
 const LangueDropdown = ({}: {}) => {
   // Hooks
-  const hookform = useFormContext<SnippetPayload>();
+  const hookform = useFormContext<SnippetPostPayload>();
 
   const [langs, setLangs] = React.useState<string[]>([]);
-  const [currentLang, setCurrentLang] = React.useState<string>(DEFAULT_LANGUE);
+  const [currentLang, setCurrentLang] = React.useState<string>();
 
   React.useEffect(() => {
     loader.init().then((monaco) => {
@@ -18,7 +18,14 @@ const LangueDropdown = ({}: {}) => {
 
       setLangs(() => langs.map((l) => l.id));
 
-      hookform.setValue('langue', DEFAULT_LANGUE);
+      const defaultValues = hookform.getValues('langue');
+
+      if (!defaultValues) {
+        hookform.setValue('langue', DEFAULT_LANGUE);
+        setCurrentLang(DEFAULT_LANGUE);
+      } else {
+        setCurrentLang(defaultValues);
+      }
     });
   }, []);
 

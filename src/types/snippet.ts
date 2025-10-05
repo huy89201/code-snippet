@@ -9,7 +9,8 @@ type Snippet = {
   snippet: string;
 };
 
-type SnippetPayload = Omit<Snippet, '_id'>;
+type SnippetPostPayload = Omit<Snippet, '_id'>;
+type SnippetPutPayload = Snippet;
 
 type SnippetParams = {
   page: number;

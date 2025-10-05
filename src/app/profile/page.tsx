@@ -1,18 +1,19 @@
-import { SnippetSection, Header } from '@/components';
+import { Header, SnippetSection } from '@/components';
+import React from 'react';
 
-export default function Home() {
+function page() {
   return (
     <div className='font-sans min-h-screen max-w-[1442px] w-full mx-auto'>
       {/* Header */}
       <Header />
 
-      {/* Title */}
       <div className='text-light-text text-[2rem] font-bold px-8'>
-        Newest Snippet
+        Your snippet
       </div>
 
-      {/* Newest snippet */}
       <SnippetSection />
     </div>
   );
 }
+
+export default page;

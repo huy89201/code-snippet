@@ -4,8 +4,12 @@ import Button from './Button';
 import { logout } from '@/actions/auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const Header = () => {
+  // Hooks
+  const searchParams = useSearchParams();
+  const userId = searchParams.get('id');
   const { data: session } = useSession();
 
   return (
@@ -15,6 +19,23 @@ const Header = () => {
       </div>
 
       <div className='flex gap-2'>
+        {userId ? (
+          <Button>
+            <Link href='/'>Homepage</Link>
+          </Button>
+        ) : (
+          <Button>
+            <Link
+              href={{
+                pathname: '/profile/',
+                query: { id: session?.user.id },
+              }}
+            >
+              Your Snippet
+            </Link>
+          </Button>
+        )}
+
         <Button>
           <Link href={'/snippet'}>Create snippet</Link>
         </Button>

@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
-const uri = `mongodb+srv://huyle89201:dlkfSATZ36dkUzdP@code-snippet.fazghhh.mongodb.net/`;
+const uri = process.env.MONGODB_URI;
 
 const options = {
   serverApi: {

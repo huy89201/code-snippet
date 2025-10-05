@@ -4,22 +4,34 @@ import axiosInstance from '@/lib/axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import SnippetList from './SnippetList';
 import Button from './Button';
+import { useSearchParams } from 'next/navigation';
 
 const PAGE_SIZE = 5;
 
-async function fetchSnippets(page = 1): Promise<GetSnippetRes> {
+async function fetchSnippets({
+  page = 1,
+  userId,
+}: {
+  page: number;
+  userId: string | null;
+}): Promise<GetSnippetRes> {
   const res = await axiosInstance.get('/api/snippet', {
-    params: { page, page_size: PAGE_SIZE },
+    params: { page, page_size: PAGE_SIZE, user_id: userId },
   });
 
   return res.data as GetSnippetRes;
 }
 
 const SnippetSection = () => {
+  // Hooks
+  const searchParams = useSearchParams();
+  const userId = searchParams.get('id');
+
   const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ['SNIPPET_QUERY_KEY', PAGE_SIZE],
-      queryFn: async ({ pageParam = 1 }) => fetchSnippets(pageParam),
+      queryFn: async ({ pageParam = 1 }) =>
+        fetchSnippets({ page: pageParam, userId }),
       initialPageParam: 1,
       getNextPageParam: (lastPage) =>
         lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,

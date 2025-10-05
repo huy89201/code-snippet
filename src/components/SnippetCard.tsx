@@ -2,12 +2,41 @@ import React from 'react';
 import moment from 'moment';
 import Button from './Button';
 import { Editor } from '@monaco-editor/react';
+import { MdModeEdit, MdDelete } from 'react-icons/md';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import axiosInstance from '@/lib/axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
+  // Hooks
+  const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
+
+  // States
+  const userId = searchParams.get('id');
+  const isCurrentUserSnippet =
+    userId === snippet.user_id || session?.user.id === snippet.user_id;
+
+  // Helpers
+  const handleDeleteSnippet = async (id: string) => {
+    try {
+      await axiosInstance.delete('/api/snippet', {
+        params: {
+          snippet_id: id,
+        },
+      });
+
+      queryClient.invalidateQueries({ queryKey: ['SNIPPET_QUERY_KEY'] });
+    } catch (error) {}
+  };
+
   return (
     <div className='flex flex-col gap-3.5'>
       {/* Thumbnail */}
-      <div className='h-[13.875rem] rounded-lg bg-bg-3 overflow-hidden'>
+      <div className='h-[30rem] lg:h-[13.875rem] rounded-lg bg-bg-3 overflow-hidden'>
         <Editor
           width='100%'
           height='100%'
@@ -24,13 +53,35 @@ const SnippetCard = ({ snippet }: { snippet: Snippet }) => {
       {/* Content */}
       <div className=''>
         {/* Tags */}
-        <div className='flex gap-4'>
-          <Button className='rounded-[1.5rem] px-4 py-2.5'>
-            #{snippet.langue}
-          </Button>
-          <Button className='rounded-[1.5rem] px-4 py-2.5'>
-            #{snippet.tag_name}
-          </Button>
+        <div className='flex justify-between items-center'>
+          <div className='flex gap-4'>
+            <Button className='rounded-[1.5rem] px-4 py-2.5'>
+              #{snippet.langue}
+            </Button>
+            <Button className='rounded-[1.5rem] px-4 py-2.5'>
+              #{snippet.tag_name}
+            </Button>
+          </div>
+
+          {isCurrentUserSnippet && (
+            <div className='flex gap-4'>
+              <Link
+                href={{
+                  pathname: '/snippet',
+                  query: { id: snippet._id },
+                }}
+              >
+                <MdModeEdit className='' />
+              </Link>
+
+              <button
+                className='cursor-pointer'
+                onClick={() => handleDeleteSnippet(snippet._id)}
+              >
+                <MdDelete />
+              </button>
+            </div>
+          )}
         </div>
 
         <div className='flex justify-between mt-2'>
