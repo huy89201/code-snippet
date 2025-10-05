@@ -42,6 +42,7 @@ export async function GET(req: Request) {
 
     const snippets = await collection
       .find({})
+      .sort({ timestamp: -1 })
       .skip((page - 1) * page_size)
       .limit(page_size)
       .toArray();

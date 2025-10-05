@@ -25,7 +25,12 @@ const SnippetSection = () => {
         lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
     });
 
-  if (isLoading) return <div className=''>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className='w-screen h-screen flex justify-center items-center text-3xl text-light-text font-medium text-center'>
+        Loading...
+      </div>
+    );
 
   const snippets = data?.pages.flatMap((p) => p.data) ?? [];
 
@@ -33,7 +38,7 @@ const SnippetSection = () => {
     <div className='flex flex-col gap-3'>
       <SnippetList data={snippets} />
 
-      <div className='flex justify-center'>
+      <div className='flex justify-center pb-2'>
         <Button
           disabled={!hasNextPage || isFetchingNextPage}
           onClick={() => fetchNextPage()}
