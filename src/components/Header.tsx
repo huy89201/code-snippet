@@ -12,6 +12,22 @@ const Header = () => {
   const userId = searchParams.get('id');
   const { data: session } = useSession();
 
+  // Helpers
+  const handleLogOut = () => {
+    // 1. Clear local/session storage
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // 2. Clear cookies (client-side)
+    document.cookie.split(';').forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, '')
+        .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+    });
+
+    logout();
+  };
+
   return (
     <div className='flex justify-between items-center p-3'>
       <div className='text-light-text text-[0.875rem] font-semibold'>
@@ -40,7 +56,7 @@ const Header = () => {
           <Link href={'/snippet'}>Create snippet</Link>
         </Button>
 
-        <Button onClick={() => logout()}>Signout</Button>
+        <Button onClick={handleLogOut}>Signout</Button>
       </div>
     </div>
   );

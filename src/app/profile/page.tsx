@@ -1,7 +1,18 @@
 import { Header, SnippetSection } from '@/components';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
-function page() {
+async function page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
+  const profileId = searchParams?.id;
+
+  if (!profileId) {
+    redirect('/');
+  }
+  
   return (
     <div className='font-sans min-h-screen max-w-[1442px] w-full mx-auto'>
       {/* Header */}
