@@ -4,18 +4,14 @@ import { GetTagRes } from '@/app/api/tag/route';
 import axiosInstance from '@/lib/axios';
 import { Tag } from '@/types/tag';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { useFormContext } from 'react-hook-form';
 
-const TagDropdown = ({
-  defaultValue,
-  onclick,
-}: {
-  defaultValue?: Tag;
-  onclick: (value: Tag) => void;
-}) => {
+const TagDropdown = ({}: {}) => {
+  // Hooks
+  const hookform = useFormContext<SnippetPayload>();
+
   const [tags, setTags] = React.useState<Tag[] | undefined>();
-  const [currentTag, setCurrentTag] = React.useState<Tag | undefined>(
-    defaultValue
-  );
+  const [currentTag, setCurrentTag] = React.useState<Tag | undefined>();
 
   React.useEffect(() => {
     const fetchTags = async () => {
@@ -24,6 +20,9 @@ const TagDropdown = ({
 
         setTags(data.data);
         setCurrentTag(data?.data?.[0]);
+
+        hookform.setValue('tag_id', data?.data?.[0]._id);
+        hookform.setValue('tag_name', data?.data?.[0].name);
       } catch (error) {
         console.log(error);
       }
@@ -50,7 +49,8 @@ const TagDropdown = ({
                 className='group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10 text-left'
                 onClick={() => {
                   setCurrentTag(t);
-                  onclick(t);
+                  hookform.setValue('tag_id', t._id);
+                  hookform.setValue('tag_name', t.name);
                 }}
               >
                 {t.name}

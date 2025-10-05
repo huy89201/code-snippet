@@ -2,22 +2,23 @@
 import React from 'react';
 import { loader } from '@monaco-editor/react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { useFormContext } from 'react-hook-form';
+import { DEFAULT_LANGUE } from '@/utils';
 
-const LangueDropdown = ({
-  defaultValue,
-  onclick,
-}: {
-  defaultValue: string;
-  onclick: (value: string) => void;
-}) => {
+const LangueDropdown = ({}: {}) => {
+  // Hooks
+  const hookform = useFormContext<SnippetPayload>();
+
   const [langs, setLangs] = React.useState<string[]>([]);
-  const [currentLang, setCurrentLang] = React.useState<string>(defaultValue);
+  const [currentLang, setCurrentLang] = React.useState<string>(DEFAULT_LANGUE);
 
   React.useEffect(() => {
     loader.init().then((monaco) => {
       const langs = monaco.languages.getLanguages();
 
       setLangs(() => langs.map((l) => l.id));
+
+      hookform.setValue('langue', DEFAULT_LANGUE);
     });
   }, []);
 
@@ -42,7 +43,7 @@ const LangueDropdown = ({
               className='group flex w-full items-center gap-2 rounded-lg px-3 py-1.5 data-focus:bg-white/10 text-left'
               onClick={() => {
                 setCurrentLang(l);
-                onclick(l);
+                hookform.setValue('langue', l);
               }}
             >
               {l}

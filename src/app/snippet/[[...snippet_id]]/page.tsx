@@ -3,38 +3,43 @@ import React from 'react';
 import { Editor } from '@monaco-editor/react';
 import { Button, LangueDropdown } from '@/components';
 import TagDropdown from '@/components/TagDropdown';
-import { Tag } from '@/types/tag';
 import { useSession } from 'next-auth/react';
 import axiosInstance from '@/lib/axios';
+import { useForm, FormProvider, useController } from 'react-hook-form';
 import Link from 'next/link';
-
-const DEFAULT_LANGUE = 'javascript';
 
 function page() {
   // Hooks
   const { data: session } = useSession();
 
-  // States
-  const [value, setValue] = React.useState<Partial<SnippetPayload> | undefined>(
-    {
+  const hookform = useForm<SnippetPayload>({
+    defaultValues: {
       timestamp: new Date().getTime(),
-      langue: DEFAULT_LANGUE,
-    }
-  );
+    },
+    mode: 'onChange',
+  });
+
+  const { field: snippetField } = useController({
+    control: hookform.control,
+    name: 'snippet',
+
+    rules: {
+      // required: true,
+      validate: (value: string) => {
+        if (value.length > 0) return true;
+
+        return false;
+      },
+    },
+  });
 
   // Helpers
-  const handleSelectLang = (value: string) => {
-    setValue((prev) => ({ ...prev, langue: value }));
-  };
-
-  const handleSelectTag = (value: Tag) => {
-    setValue((prev) => ({ ...prev, tag_id: value._id, tag_name: value.name }));
-  };
-
   const handleSave = async () => {
+    const values = hookform.getValues();
+
     try {
       await axiosInstance.post('/api/snippet', {
-        ...value,
+        ...values,
         user_id: session?.user.id,
         user_name: session?.user.name,
       });
@@ -42,35 +47,37 @@ function page() {
   };
 
   return (
-    <div className='flex flex-col gap-4 w-screen h-screen p-3'>
-      <div className='flex-[0] flex justify-between'>
-        <LangueDropdown
-          onclick={handleSelectLang}
-          defaultValue={DEFAULT_LANGUE}
-        />
+    <FormProvider {...hookform}>
+      <form
+        onSubmit={hookform.handleSubmit(handleSave)}
+        className='flex flex-col gap-4 min-h-screen max-w-[1442px] w-full mx-auto p-3'
+      >
+        <div className='flex-[0] flex justify-between'>
+          <LangueDropdown />
 
-        <TagDropdown onclick={handleSelectTag} />
-      </div>
+          <TagDropdown />
+        </div>
 
-      <div className='flex-1'>
-        <Editor
-          width='100%'
-          height='100%'
-          language={value?.langue}
-          theme='vs-dark'
-          onChange={(value) =>
-            setValue((prev) => ({ ...prev, snippet: value }))
-          }
-        />
-      </div>
+        <div className='flex-1'>
+          <Editor
+            width='100%'
+            height='80vh'
+            language={hookform.getValues('langue')}
+            theme='vs-dark'
+            onChange={(value) => snippetField.onChange(value)}
+          />
+        </div>
 
-      <div className='action flex-[0] flex gap-4 justify-end'>
-        <Button type='button'>
-          <Link href='/'>Back</Link>
-        </Button>
-        <Button onClick={handleSave}>Save</Button>
-      </div>
-    </div>
+        <div className='action flex-[0] flex gap-4 justify-end'>
+          <Button type='button'>
+            <Link href='/'>Back</Link>
+          </Button>
+          <Button type='submit' disabled={!hookform.formState.isValid}>
+            Save
+          </Button>
+        </div>
+      </form>
+    </FormProvider>
   );
 }
 
