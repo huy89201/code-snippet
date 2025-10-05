@@ -92,7 +92,10 @@ export const SnippetForm = ({ defaultValues }: { defaultValues?: Snippet }) => {
           <Button type='button'>
             <Link href='/'>Back</Link>
           </Button>
-          <Button type='submit' disabled={!hookform.formState.isValid}>
+          <Button
+            type='submit'
+            disabled={!hookform.formState.isValid || session?.user.id !== _id}
+          >
             Save
           </Button>
         </div>
