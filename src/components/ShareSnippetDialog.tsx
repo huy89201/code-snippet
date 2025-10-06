@@ -1,6 +1,7 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import React from 'react';
 import Button from './Button';
+import { useTranslation } from 'react-i18next';
 
 const ShareSnippetDialog = ({
   isOpen,
@@ -11,6 +12,10 @@ const ShareSnippetDialog = ({
   close: () => void;
   path?: string;
 }) => {
+  // Hooks
+  const { t } = useTranslation();
+
+  // Helpers
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(path ?? '');
@@ -36,11 +41,11 @@ const ShareSnippetDialog = ({
               as='h3'
               className='text-base font-medium text-light-text'
             >
-              Share your snippet
+              {t('title.shareSnippet')}
             </DialogTitle>
             <p className='mt-2 text-sm/6 text-white/50'>{path}</p>
             <div className='mt-4'>
-              <Button onClick={handleCopy}>Copy</Button>
+              <Button onClick={handleCopy}>{t('button.copy')}</Button>
             </div>
           </DialogPanel>
         </div>

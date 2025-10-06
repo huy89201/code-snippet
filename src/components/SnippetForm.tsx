@@ -7,6 +7,7 @@ import TagDropdown from '@/components/TagDropdown';
 import { Editor } from '@monaco-editor/react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 export const SnippetForm = ({ defaultValues }: { defaultValues?: Snippet }) => {
   const { _id, ...restDefaultValues } = defaultValues ?? {};
@@ -15,6 +16,7 @@ export const SnippetForm = ({ defaultValues }: { defaultValues?: Snippet }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const hookform = useForm<SnippetPostPayload>({
     defaultValues: {
@@ -90,13 +92,10 @@ export const SnippetForm = ({ defaultValues }: { defaultValues?: Snippet }) => {
 
         <div className='action flex-[0] flex gap-4 justify-end'>
           <Button type='button'>
-            <Link href='/'>Back</Link>
+            <Link href='/'>{t('button.back')}</Link>
           </Button>
-          <Button
-            type='submit'
-            disabled={!hookform.formState.isValid || session?.user.id !== _id}
-          >
-            Save
+          <Button type='submit' disabled={!hookform.formState.isValid}>
+            {t('button.save')}
           </Button>
         </div>
       </form>

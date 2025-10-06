@@ -3,7 +3,7 @@ import React from 'react';
 import axiosInstance from '@/lib/axios';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { SnippetForm } from './SnippetForm';
+import { SnippetForm } from '../../../components/SnippetForm';
 
 async function fetchSnippetsDetails({
   snippetId,

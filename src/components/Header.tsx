@@ -5,12 +5,15 @@ import { logout } from '@/actions/auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
+import LangDropdown from './LangDropdown';
 
 const Header = () => {
   // Hooks
   const searchParams = useSearchParams();
   const userId = searchParams.get('id');
   const { data: session } = useSession();
+  const { t } = useTranslation();
 
   // Helpers
   const handleLogOut = () => {
@@ -35,9 +38,11 @@ const Header = () => {
       </div>
 
       <div className='flex gap-2'>
+        <LangDropdown />
+
         {userId ? (
           <Button>
-            <Link href='/'>Homepage</Link>
+            <Link href='/'>{t('button.homePage')}</Link>
           </Button>
         ) : (
           <Button>
@@ -47,16 +52,16 @@ const Header = () => {
                 query: { id: session?.user.id },
               }}
             >
-              Your Snippet
+              {t('button.profile')}
             </Link>
           </Button>
         )}
 
         <Button>
-          <Link href={'/snippet'}>Create snippet</Link>
+          <Link href={'/snippet'}> {t('button.createSnippet')}</Link>
         </Button>
 
-        <Button onClick={handleLogOut}>Signout</Button>
+        <Button onClick={handleLogOut}> {t('button.signout')}</Button>
       </div>
     </div>
   );

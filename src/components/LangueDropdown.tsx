@@ -4,10 +4,12 @@ import { loader } from '@monaco-editor/react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { useFormContext } from 'react-hook-form';
 import { DEFAULT_LANGUE } from '@/utils';
+import { useTranslation } from 'react-i18next';
 
 const LangueDropdown = ({}: {}) => {
   // Hooks
   const hookform = useFormContext<SnippetPostPayload>();
+  const { t } = useTranslation();
 
   const [langs, setLangs] = React.useState<string[]>([]);
   const [currentLang, setCurrentLang] = React.useState<string>();
@@ -33,7 +35,9 @@ const LangueDropdown = ({}: {}) => {
     <Menu>
       <MenuButton className='w-[10rem]'>
         <div className='flex gap-2'>
-          <span className='text-light-text text-base font-medium'>Langue:</span>
+          <span className='text-light-text text-base font-medium'>
+            {t('title.lang')}:
+          </span>
 
           <span className='text-base font-medium text-light-text overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]'>
             {currentLang}

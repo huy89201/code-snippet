@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import SnippetList from './SnippetList';
 import Button from './Button';
 import { useSearchParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 const PAGE_SIZE = 5;
 
@@ -26,6 +27,7 @@ const SnippetSection = () => {
   // Hooks
   const searchParams = useSearchParams();
   const userId = searchParams.get('id');
+  const { t } = useTranslation();
 
   const {
     data,
@@ -43,10 +45,10 @@ const SnippetSection = () => {
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
   });
 
-  if (isLoading || isFetching)
+  if (isLoading || (isFetching && userId))
     return (
       <div className='flex-1 w-max h-max mx-auto flex justify-center items-center text-3xl text-light-text font-medium text-center'>
-        Loading...
+        {t('title.loading')}
       </div>
     );
 
@@ -62,7 +64,7 @@ const SnippetSection = () => {
           onClick={() => fetchNextPage()}
           className='w-30'
         >
-          {isFetchingNextPage ? 'Loading...' : 'Load more'}
+          {isFetchingNextPage ? t('title.loading') : t('button.loadMore')}
         </Button>
       </div>
     </div>

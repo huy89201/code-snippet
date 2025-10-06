@@ -1,0 +1,20 @@
+{
+  "button": {
+    "homePage": "Homepage",
+    "createSnippet": "Create Snippet",
+    "signin": "Signin",
+    "signout": "Signout",
+    "profile": "Your profile",
+    "loadMore": "Load more",
+    "save": "Save",
+    "back": "Back",
+    "copy": "Copy"
+  },
+  "title": {
+    "newestSnippet": "Newest Snippet",
+    "yourSnippet": "Your snippet",
+    "shareSnippet": "Share your snippet",
+    "lang": "Langue",
+    "loading": "Loading..."
+  }
+}

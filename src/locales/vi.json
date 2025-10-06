@@ -1,0 +1,20 @@
+{
+  "button": {
+    "homePage": "Trang chủ",
+    "createSnippet": "Tạo đoạn mã",
+    "signin": "Đăng nhập",
+    "signout": "Đăng xuất",
+    "profile": "Hồ sơ",
+    "loadMore": "Tải thêm",
+    "save": "Lưu",
+    "back": "Quay lại",
+    "copy": "Sao chép"
+  },
+  "title": {
+    "newestSnippet": "Các đoạn mã mới nhất",
+    "yourSnippet": "Mã của bạn",
+    "shareSnippet": "Chia sẽ mã của bạn",
+    "lang": "Ngôn ngữ",
+    "loading": "Đang tải..."
+  }
+}

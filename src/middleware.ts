@@ -11,5 +11,5 @@ export default withAuth(() => {}, {
 });
 
 export const config = {
-  matcher: ['/', '/snippet/:path*', '/profile/:path*'],
+  matcher: ['/', '/snippet/:path*'],
 };
