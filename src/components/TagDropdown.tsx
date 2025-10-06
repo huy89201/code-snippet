@@ -5,6 +5,7 @@ import axiosInstance from '@/lib/axios';
 import { Tag } from '@/types/tag';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { useFormContext } from 'react-hook-form';
+import { FaArrowDown } from 'react-icons/fa';
 
 const TagDropdown = ({}: {}) => {
   // Hooks
@@ -42,8 +43,9 @@ const TagDropdown = ({}: {}) => {
   return (
     <Menu>
       <MenuButton>
-        <div className='text-light-text text-base font-medium'>
+        <div className='text-light-text text-base font-medium flex items-baseline'>
           #<span>{currentTag?.name}</span>
+          <FaArrowDown className='size-3 ml-0.5' />
         </div>
       </MenuButton>
       <MenuItems

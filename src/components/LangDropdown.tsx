@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowDown } from 'react-icons/fa';
 
-type Lang = 'en' | 'vi';
+type Lang = 'en' | 'vi'; 
 const DEFAULT_LANGUE = localStorage.getItem('lang');
 
 const LangDropdown = () => {

@@ -6,11 +6,14 @@ import { useFormContext } from 'react-hook-form';
 import { DEFAULT_LANGUE } from '@/utils';
 import { useTranslation } from 'react-i18next';
 
+import { FaArrowDown } from 'react-icons/fa';
+
 const LangueDropdown = ({}: {}) => {
   // Hooks
   const hookform = useFormContext<SnippetPostPayload>();
   const { t } = useTranslation();
 
+  // States
   const [langs, setLangs] = React.useState<string[]>([]);
   const [currentLang, setCurrentLang] = React.useState<string>();
 
@@ -33,15 +36,17 @@ const LangueDropdown = ({}: {}) => {
 
   return (
     <Menu>
-      <MenuButton className='w-[10rem]'>
-        <div className='flex gap-2'>
+      <MenuButton className='w-[15rem]'>
+        <div className='flex gap-2 items-baseline'>
           <span className='text-light-text text-base font-medium'>
             {t('title.lang')}:
           </span>
 
-          <span className='text-base font-medium text-light-text overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]'>
+          <span className='text-base text-left font-medium text-light-text overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:1] [-webkit-box-orient:vertical]'>
             {currentLang}
           </span>
+
+          <FaArrowDown className='size-3' />
         </div>
       </MenuButton>
       <MenuItems

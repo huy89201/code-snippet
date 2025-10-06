@@ -45,7 +45,7 @@ const SnippetSection = () => {
       lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
   });
 
-  if (isLoading || (isFetching && userId))
+  if (isLoading || isFetching)
     return (
       <div className='flex-1 w-max h-max mx-auto flex justify-center items-center text-3xl text-light-text font-medium text-center'>
         {t('title.loading')}

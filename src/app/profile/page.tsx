@@ -1,19 +1,18 @@
 'use client';
-import { Header, SnippetSection } from '@/components';
-import { redirect } from 'next/navigation';
 import React from 'react';
+import { Header, SnippetSection } from '@/components';
+import { redirect, useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-async function page({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) {
+function page() {
+  // Hooks
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
 
-  const profileId = searchParams?.id;
+  // States
+  const userId = searchParams.get('id');
 
-  if (!profileId) {
+  if (!userId) {
     redirect('/');
   }
 

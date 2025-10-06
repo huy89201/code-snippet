@@ -7,8 +7,6 @@ import '@/lib/i18n';
 import moment from 'moment';
 import 'moment/locale/vi';
 
-const DEFAULT_LANGUE = localStorage.getItem('lang');
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -27,8 +25,10 @@ function AuthProvider({
   const { i18n } = useTranslation();
 
   React.useEffect(() => {
+    const DEFAULT_LANGUE = localStorage.getItem('lang');
+
     i18n.changeLanguage(DEFAULT_LANGUE ?? 'en');
-    moment.locale('en');
+    moment.locale(DEFAULT_LANGUE ?? 'en');
   }, []);
   return (
     <SessionProvider>
