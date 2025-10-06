@@ -1,3 +1,4 @@
+'use client';
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
 import Button from './Button';

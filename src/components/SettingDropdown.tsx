@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 

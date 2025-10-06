@@ -5,15 +5,18 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowDown } from 'react-icons/fa';
 
-type Lang = 'en' | 'vi'; 
-const DEFAULT_LANGUE = localStorage.getItem('lang');
+type Lang = 'en' | 'vi';
 
 const LangDropdown = () => {
   const { i18n } = useTranslation();
-  const [lang, setLang] = React.useState<Lang>(
-    (DEFAULT_LANGUE as Lang) ?? 'en'
-  );
+  const [lang, setLang] = React.useState<Lang>();
   const langues = ['en', 'vi'];
+
+  React.useEffect(() => {
+    const DEFAULT_LANGUE = localStorage.getItem('lang');
+
+    setLang((DEFAULT_LANGUE as Lang) ?? 'en');
+  }, []);
 
   return (
     <Menu>
